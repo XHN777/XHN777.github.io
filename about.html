@@ -1,0 +1,33 @@
+---
+layout: default
+permalink: /about/
+title: About
+---
+{% assign profile = site.data.profile %}
+
+<section class="page-hero section compact-hero">
+  <span class="eyebrow">About</span>
+  <h1>{{ profile.name }}</h1>
+  <p>{{ profile.bio }}</p>
+</section>
+
+<section class="section content-grid">
+  <div class="glass-panel about-card reveal tilt-card">
+    <div class="meta-grid">
+      <div><span>学校</span><strong>{{ profile.school }}</strong></div>
+      <div><span>方向</span><strong>Java 后端 · 软件架构 · UML 建模</strong></div>
+    </div>
+  </div>
+  <div class="glass-panel about-card reveal tilt-card">
+    <h3>研究兴趣</h3>
+    <div class="interest-list" style="margin-top:12px;">
+      {% for interest in profile.interests %}
+      <span>{{ interest }}</span>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="glass-panel about-card reveal tilt-card">
+    <h3>工作方式</h3>
+    <p>我习惯从"需求分析 → 架构设计 → 编码实现 → 测试部署"四个层面推进项目。注重代码的可维护性和架构的清晰性，喜欢用 UML 图辅助思考和沟通。</p>
+  </div>
+</section>

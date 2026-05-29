@@ -1,0 +1,151 @@
+---
+layout: default
+---
+{% assign profile = site.data.profile %}
+
+<section class="hero section">
+  <div class="hero-content">
+    <div class="eyebrow">Yunnan University · Software Engineering</div>
+    <h1 data-text="{{ profile.name }}">{{ profile.name }}</h1>
+    <p class="hero-role">{{ profile.role }}</p>
+    <p class="hero-slogan">{{ profile.slogan }}</p>
+    <div class="terminal-line" aria-label="动态状态">
+      <span>~/portfolio</span>
+      <code id="typing-line">initializing...</code>
+    </div>
+    <div class="hero-actions">
+      <a class="btn primary" href="{{ '/blog/' | relative_url }}">Read Blog</a>
+      <a class="btn ghost" href="#projects">View Projects</a>
+      <a class="btn ghost" href="{{ profile.contact.github }}" target="_blank" rel="noreferrer">GitHub</a>
+    </div>
+    <div class="hero-stats">
+      <span><strong>3</strong> Featured Projects</span>
+      <span><strong>{{ site.posts | size }}</strong> Blog Posts</span>
+      <span><strong>6</strong> Skill Areas</span>
+    </div>
+  </div>
+  <div class="hero-portrait tilt-card glass-panel">
+    <img src="{{ '/assets/images/avatar.svg' | relative_url }}" alt="{{ profile.name }} avatar">
+    <div>
+      <span class="status-dot"></span>
+      <strong>Open to collaboration</strong>
+      <p>Java · Architecture · Automation</p>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="section content-grid">
+  <div class="section-heading">
+    <span class="eyebrow">About Me</span>
+    <h2>面向工程实践的软件开发学习者</h2>
+  </div>
+  <div class="glass-panel about-card reveal tilt-card">
+    <p>{{ profile.bio }}</p>
+    <div class="meta-grid">
+      <div><span>School</span><strong>{{ profile.school }}</strong></div>
+      <div><span>Focus</span><strong>Java Backend · Software Architecture</strong></div>
+    </div>
+  </div>
+  <div class="interest-list">
+    {% for interest in profile.interests %}
+    <span>{{ interest }}</span>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="skills" class="section">
+  <div class="section-heading center">
+    <span class="eyebrow">Skills</span>
+    <h2>从编码到部署的全链路技术栈</h2>
+  </div>
+  <div class="skill-grid">
+    {% for group in profile.skills %}
+    <article class="glass-panel skill-card reveal tilt-card">
+      <h3>{{ group[1].title }}</h3>
+      <div class="tag-list">
+        {% for item in group[1].items %}
+        <span>{{ item }}</span>
+        {% endfor %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="projects" class="section">
+  <div class="section-heading">
+    <span class="eyebrow">Projects</span>
+    <h2>课程实践与个人项目</h2>
+  </div>
+  <div class="project-grid">
+    {% for project in profile.projects %}
+    <article class="project-card glass-panel reveal tilt-card">
+      <img src="{{ project.image | relative_url }}" alt="{{ project.title }}">
+      <div class="project-body">
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.summary }}</p>
+        <div class="tag-list compact">
+          {% for tag in project.tags %}
+          <span>{{ tag }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="research" class="section">
+  <div class="section-heading center">
+    <span class="eyebrow">Research &amp; Study</span>
+    <h2>正在推进的学习与实践</h2>
+  </div>
+  <div class="timeline">
+    {% for item in profile.research %}
+    <article class="timeline-item glass-panel reveal tilt-card">
+      <span>{{ item.role }}</span>
+      <h3>{{ item.title }}</h3>
+      <p>{{ item.summary }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="notes" class="section split-section">
+  <div class="section-heading">
+    <span class="eyebrow">Blog / Learning Notes</span>
+    <h2>用博客持续记录成长</h2>
+    <p>把课程笔记、项目复盘和踩坑经验整理成可持续更新的技术博客。</p>
+    <div class="hero-actions small-actions">
+      <a class="btn primary" href="{{ '/blog/' | relative_url }}">All Posts</a>
+      <a class="btn ghost" href="{{ '/categories/' | relative_url }}">Categories</a>
+      <a class="btn ghost" href="{{ '/tags/' | relative_url }}">Tags</a>
+    </div>
+  </div>
+  <div class="notes-list">
+    {% for post in site.posts limit: 4 %}
+    <a class="note-card glass-panel reveal tilt-card" href="{{ post.url | relative_url }}">
+      <span>{{ post.date | date: "%Y.%m.%d" }}</span>
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.excerpt | strip_html | truncate: 100 }}</p>
+      <div class="tag-list compact">
+        {% for tag in post.tags limit: 4 %}
+        <span>{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="contact" class="section contact-section">
+  <div class="glass-panel contact-card reveal">
+    <span class="eyebrow">Contact</span>
+    <h2>让想法从代码开始生长</h2>
+    <p>欢迎围绕 Java 后端开发、软件架构、UML 建模与自动化部署交流合作。</p>
+    <div class="contact-links">
+      <a href="mailto:{{ profile.contact.email }}">{{ profile.contact.email }}</a>
+      <a href="{{ profile.contact.github }}" target="_blank" rel="noreferrer">github.com/XHN777</a>
+    </div>
+  </div>
+</section>

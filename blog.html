@@ -1,0 +1,27 @@
+---
+layout: default
+permalink: /blog/
+title: Blog
+---
+<section class="page-hero section compact-hero">
+  <span class="eyebrow">Blog</span>
+  <h1>学习笔记与项目复盘</h1>
+  <p>用博客方式沉淀课程作业、项目实践、架构设计和踩坑经验，方便持续维护与回顾。</p>
+</section>
+
+<section class="section post-index">
+  {% for post in site.posts %}
+  <article class="post-row glass-panel reveal tilt-card">
+    <div class="post-date">{{ post.date | date: "%Y.%m.%d" }}</div>
+    <div>
+      <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
+      <p>{{ post.excerpt | strip_html | truncate: 150 }}</p>
+      <div class="tag-list compact">
+        {% for tag in post.tags %}
+        <span>{{ tag }}</span>
+        {% endfor %}
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</section>

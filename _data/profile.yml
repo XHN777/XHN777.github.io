@@ -1,0 +1,92 @@
+name: 徐浩宁
+nickname: 登炮戈
+role: Software Engineering Student / Java Backend Developer
+school: 云南大学 · 软件工程
+slogan: 把清晰的架构，变成可运行的代码。
+
+bio: >
+  我是一名来自云南大学软件工程专业的学生，专注于 Java 后端开发、软件架构设计
+  与 UML 建模。从 Robocode 智能对战到系统部署，我享受把复杂问题拆解为清晰架构、
+  再落地为可靠代码的过程。目前正在深入三层架构部署、CI/CD 流水线
+  与 GitHub Pages 自动化构建。
+
+interests:
+  - Java 后端开发
+  - 软件架构设计
+  - UML 系统建模
+  - Robocode 智能对战
+  - 三层架构部署
+  - CI/CD 自动化
+
+skills:
+  programming:
+    title: Programming
+    items:
+      - Java
+      - Python
+      - Git
+      - SQL
+  engineering:
+    title: Engineering
+    items:
+      - Spring Boot
+      - Docker
+      - GitHub Actions
+      - Jekyll
+  tools:
+    title: Tools & Practices
+    items:
+      - UML
+      - Robocode
+      - Linux
+      - CI/CD
+
+projects:
+  - title: Robocode 智能战斗机器人
+    tags:
+      - Java
+      - AdvancedRobot
+      - 雷达锁定
+      - 非线性移动
+    summary: >
+      基于 Robocode 平台开发的智能战斗机器人，实现 AdvancedRobot 雷达锁定、
+      自适应攻击策略与非线性移动算法，在多个对战场景中保持高胜率。
+    image: /assets/images/placeholder.png
+
+  - title: 三层架构 Web 应用部署方案
+    tags:
+      - UML
+      - 部署图
+      - Nginx
+      - 三层架构
+    summary: >
+      设计并实现 Web 服务器-应用服务器-数据库服务器三层架构的 UML 部署图，
+      涵盖负载均衡、应用集群、数据库主从复制等关键组件。
+    image: /assets/images/placeholder.png
+
+  - title: GitHub Pages 自动化部署系统
+    tags:
+      - Jekyll
+      - GitHub Actions
+      - CI/CD
+      - 静态网站
+    summary: >
+      基于 Jekyll + GitHub Actions 构建个人作品集网站，实现 main 分支源码
+      自动编译并部署到 gh-pages 分支的全自动化流水线。
+    image: /assets/images/placeholder.png
+
+research:
+  - role: "课程项目"
+    title: AdvancedRobot 多策略对战研究
+    summary: >
+      研究 Robocode 平台下 AdvancedRobot 的雷达锁定、自适应火控与非线性移动策略，探索多种战术组合在实战中的表现差异。
+    image: /assets/images/placeholder.png
+  - role: "架构设计"
+    title: 基于 UML 的三层架构部署方案设计
+    summary: >
+      使用 UML 部署图系统化设计 Web 服务器集群、应用服务器集群与数据库服务器（主从复制）的完整部署方案，涵盖节点规范、组件映射与通信协议。
+    image: /assets/images/placeholder.png
+
+contact:
+  email: xuhaoning@stu.ynu.edu.cn
+  github: https://github.com/XHN777

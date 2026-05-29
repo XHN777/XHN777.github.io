@@ -1,0 +1,22 @@
+---
+layout: default
+---
+<article class="post-shell">
+  <header class="post-header">
+    <div class="post-date">{{ page.date | date: "%Y.%m.%d" }}</div>
+    <h1>{{ page.title }}</h1>
+    {% if page.tags %}
+    <div class="tag-list">
+      {% for tag in page.tags %}
+      <span>{{ tag }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </header>
+  <div class="post-article">
+    {{ content }}
+  </div>
+  <footer class="post-footer">
+    <a class="btn ghost" href="{{ '/blog/' | relative_url }}">&larr; Back to Blog</a>
+  </footer>
+</article>

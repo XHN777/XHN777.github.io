@@ -1,18 +1,26 @@
-title: "My GitHub Page"
-description: "个人主页"
-url: ""                   # 部署后填写：https://你的用户名.github.io
-baseurl: ""               # 如果是项目页填仓库名，例如 /my-repo；个人主页留空
+title: 徐浩宁 | Software Engineering Portfolio
+email: xuhaoning@stu.ynu.edu.cn
+description: 云南大学软件工程学生，关注 Java 后端开发、软件架构设计、UML 建模与 Robocode 智能对战。
+url: https://XHN777.github.io
+github_username: XHN777
+lang: zh-CN
+timezone: Asia/Shanghai
 
-theme: minima
+markdown: kramdown
+kramdown:
+  input: GFM
 
-# 插件
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-sitemap
 
-# 排除不需要编译的文件
 exclude:
+  - Dockerfile
+  - docker-compose.yml
+  - README.md
   - Gemfile
   - Gemfile.lock
-  - README.md
-  - .github/
+  - vendor
+  - node_modules
+  - ASSET_PROMPTS.md

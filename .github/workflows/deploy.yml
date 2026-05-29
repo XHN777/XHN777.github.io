@@ -1,42 +1,36 @@
+# Jekyll + GitHub Pages Deploy
+
 name: Deploy Jekyll to GitHub Pages
 
 on:
   push:
-    branches:
-      - main          # 主分支有推送时触发
-  workflow_dispatch:  # 允许手动触发
+    branches: [main]
 
 permissions:
-  contents: write     # 需要写权限才能推 gh-pages 分支
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
-      # 1. 检出主分支源代码
-      - name: Checkout source
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # 2. 设置 Ruby 环境
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"
-          bundler-cache: true   # 自动运行 bundle install 并缓存 gems
+          ruby-version: '3.2'
+          bundler-cache: true
 
-      # 3. 编译 Jekyll
-      - name: Build Jekyll site
+      - name: Build Jekyll
         run: bundle exec jekyll build
-        env:
-          JEKYLL_ENV: production
 
-      # 4. 把 _site/ 内容推送到 gh-pages 分支
-      - name: Deploy to gh-pages branch
+      - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site          # Jekyll 编译输出目录
-          publish_branch: gh-pages      # 目标分支
-          commit_message: "Auto deploy from ${{ github.sha }}"
-          force_orphan: true            # gh-pages 分支保持干净，只放编译产物
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'

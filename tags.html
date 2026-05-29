@@ -1,0 +1,24 @@
+---
+layout: default
+permalink: /tags/
+title: Tags
+---
+<section class="page-hero section compact-hero">
+  <span class="eyebrow">Tags</span>
+  <h1>标签索引</h1>
+  <p>按标签快速定位感兴趣的文章。</p>
+</section>
+
+{% assign tags = site.tags | sort %}
+<section class="section archive-grid">
+  {% for tag in tags %}
+  <div class="archive-card glass-panel reveal tilt-card">
+    <h3>{{ tag[0] }}</h3>
+    <ul>
+      {% for post in tag[1] %}
+      <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</section>

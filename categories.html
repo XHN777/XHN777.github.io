@@ -1,0 +1,24 @@
+---
+layout: default
+permalink: /categories/
+title: Categories
+---
+<section class="page-hero section compact-hero">
+  <span class="eyebrow">Categories</span>
+  <h1>文章分类</h1>
+  <p>按主题浏览所有博客文章。</p>
+</section>
+
+{% assign categories = site.posts | group_by: "category" | sort: "name" %}
+<section class="section archive-grid">
+  {% for category in categories %}
+  <div class="archive-card glass-panel reveal tilt-card">
+    <h3>{{ category.name }}</h3>
+    <ul>
+      {% for post in category.items %}
+      <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %}
+</section>
