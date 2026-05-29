@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#050712">
+    <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>GitHub Pages + Jekyll + Actions：搭建全自动个人网站 | 徐浩宁 Software Engineering Portfolio</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="GitHub Pages + Jekyll + Actions：搭建全自动个人网站" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="为什么选这个方案？" />
+<meta name="twitter:description" property="og:description" content="为什么选这个方案？" />
+<link rel="canonical" href="https://xhn777.github.io/devops/2026/05/22/github-pages-jekyll-setup.html" />
+<meta property="og:url" content="https://xhn777.github.io/devops/2026/05/22/github-pages-jekyll-setup.html" />
+<meta property="og:site_name" content="徐浩宁 Software Engineering Portfolio" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-05-22T00:00:00+08:00" />
+<meta property="article:modified_time" content="2026-05-22T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="GitHub Pages + Jekyll + Actions：搭建全自动个人网站" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-05-22T00:00:00+08:00","datePublished":"2026-05-22T00:00:00+08:00","description":"为什么选这个方案？","headline":"GitHub Pages + Jekyll + Actions：搭建全自动个人网站","mainEntityOfPage":{"@type":"WebPage","@id":"https://xhn777.github.io/devops/2026/05/22/github-pages-jekyll-setup.html"},"url":"https://xhn777.github.io/devops/2026/05/22/github-pages-jekyll-setup.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+  </head>
+  <body id="top">
+    <div class="pixel-bg" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <div class="matrix-rain" aria-hidden="true"></div>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    <header class="site-header" data-glass>
+  <a class="brand" href="/#top" aria-label="返回首页">
+    <span class="brand-mark">XHN</span>
+    <span>登炮戈</span>
+  </a>
+  <button class="nav-toggle" type="button" aria-label="打开导航" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="site-nav" aria-label="主导航">
+    <a href="/">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#projects">Projects</a>
+    <a href="/#skills">Skills</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+</header>
+
+    <main>
+      <article class="post-shell">
+  <header class="post-header">
+    <div class="post-date">2026.05.22</div>
+    <h1>GitHub Pages + Jekyll + Actions：搭建全自动个人网站</h1>
+    
+    <div class="tag-list">
+      
+      <span>Jekyll</span>
+      
+      <span>GitHub Actions</span>
+      
+      <span>CI/CD</span>
+      
+      <span>GitHub Pages</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-article">
+    <h2 id="为什么选这个方案">为什么选这个方案？</h2>
+
+<p>搭个人网站方法很多：WordPress、Hexo、Hugo……我选 Jekyll + GitHub Pages 的原因很简单：</p>
+
+<ol>
+  <li><strong>零成本托管</strong>：GitHub Pages 免费</li>
+  <li><strong>版本控制</strong>：网站源码就是 Git 仓库</li>
+  <li><strong>自动化部署</strong>：GitHub Actions 自动编译推送</li>
+  <li><strong>纯静态</strong>：速度快，无安全漏洞</li>
+</ol>
+
+<h2 id="项目结构">项目结构</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>my-github-page/
+├── .github/workflows/deploy.yml  ← 自动部署配置
+├── _config.yml                   ← Jekyll 配置
+├── _data/profile.yml             ← 个人信息数据
+├── _layouts/                     ← 页面布局模板
+├── _includes/                    ← 页头/页脚组件
+├── _posts/                       ← 博客文章
+├── assets/                       ← CSS/JS/图片
+└── index.html                    ← 首页
+</code></pre></div></div>
+
+<h2 id="github-actions-工作流">GitHub Actions 工作流</h2>
+
+<p>核心流程只有三步：</p>
+
+<ol>
+  <li><strong>检出代码</strong>（actions/checkout）</li>
+  <li><strong>编译 Jekyll</strong>（jekyll build）</li>
+  <li><strong>推送到 gh-pages 分支</strong>（peaceiris/actions-gh-pages）</li>
+</ol>
+
+<p>每次 push 到 main 分支就自动触发，编译产物自动出现在 <code class="language-plaintext highlighter-rouge">gh-pages</code> 分支上，GitHub Pages 自动更新。</p>
+
+<h2 id="部署配置要点">部署配置要点</h2>
+
+<ul>
+  <li>main 分支：放<strong>源代码</strong>（Jekyll 模板、Markdown 文章）</li>
+  <li>gh-pages 分支：放<strong>编译产物</strong>（纯 HTML/CSS/JS）</li>
+  <li>GitHub Pages 设置：Source 选 <code class="language-plaintext highlighter-rouge">gh-pages</code> 分支</li>
+</ul>
+
+<p>这样以后写新文章只需要在 <code class="language-plaintext highlighter-rouge">_posts/</code> 放一个 <code class="language-plaintext highlighter-rouge">.md</code> 文件，push 上去就自动部署，完全不需要手动操作。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a class="btn ghost" href="/blog/">&larr; Back to Blog</a>
+  </footer>
+</article>
+
+    </main>
+    <footer class="site-footer">
+  <p>&copy; 2026 徐浩宁. Built with Jekyll &amp; GitHub Pages. Hosted on GitHub Pages.</p>
+</footer>
+
+    <script src="/assets/js/main.js" defer></script>
+  </body>
+</html>

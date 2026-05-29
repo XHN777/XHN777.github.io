@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#050712">
+    <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Robocode AdvancedRobot 开发笔记：从雷达锁定到智能移动 | 徐浩宁 Software Engineering Portfolio</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Robocode AdvancedRobot 开发笔记：从雷达锁定到智能移动" />
+<meta property="og:locale" content="zh_CN" />
+<meta name="description" content="什么是 Robocode？" />
+<meta name="twitter:description" property="og:description" content="什么是 Robocode？" />
+<link rel="canonical" href="https://xhn777.github.io/robocode/2026/05/28/robocode-advanced-robot.html" />
+<meta property="og:url" content="https://xhn777.github.io/robocode/2026/05/28/robocode-advanced-robot.html" />
+<meta property="og:site_name" content="徐浩宁 Software Engineering Portfolio" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2026-05-28T00:00:00+08:00" />
+<meta property="article:modified_time" content="2026-05-28T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Robocode AdvancedRobot 开发笔记：从雷达锁定到智能移动" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2026-05-28T00:00:00+08:00","datePublished":"2026-05-28T00:00:00+08:00","description":"什么是 Robocode？","headline":"Robocode AdvancedRobot 开发笔记：从雷达锁定到智能移动","mainEntityOfPage":{"@type":"WebPage","@id":"https://xhn777.github.io/robocode/2026/05/28/robocode-advanced-robot.html"},"url":"https://xhn777.github.io/robocode/2026/05/28/robocode-advanced-robot.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css">
+  </head>
+  <body id="top">
+    <div class="pixel-bg" aria-hidden="true"></div>
+    <div class="cursor-glow" aria-hidden="true"></div>
+    <div class="matrix-rain" aria-hidden="true"></div>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    <header class="site-header" data-glass>
+  <a class="brand" href="/#top" aria-label="返回首页">
+    <span class="brand-mark">XHN</span>
+    <span>登炮戈</span>
+  </a>
+  <button class="nav-toggle" type="button" aria-label="打开导航" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+  <nav class="site-nav" aria-label="主导航">
+    <a href="/">Home</a>
+    <a href="/#about">About</a>
+    <a href="/#projects">Projects</a>
+    <a href="/#skills">Skills</a>
+    <a href="/blog/">Blog</a>
+  </nav>
+</header>
+
+    <main>
+      <article class="post-shell">
+  <header class="post-header">
+    <div class="post-date">2026.05.28</div>
+    <h1>Robocode AdvancedRobot 开发笔记：从雷达锁定到智能移动</h1>
+    
+    <div class="tag-list">
+      
+      <span>Java</span>
+      
+      <span>Robocode</span>
+      
+      <span>AdvancedRobot</span>
+      
+      <span>AI</span>
+      
+    </div>
+    
+  </header>
+  <div class="post-article">
+    <h2 id="什么是-robocode">什么是 Robocode？</h2>
+
+<p><a href="https://robocode.sourceforge.io/">Robocode</a> 是一个编程对战游戏，你需要用 Java 编写一个坦克机器人，在虚拟战场上与其他机器人对战。AdvancedRobot 是其中功能最强大的基类，支持独立控制雷达、炮塔和底盘。</p>
+
+<h2 id="雷达锁定策略">雷达锁定策略</h2>
+
+<p>雷达锁定是战斗的第一步。在 Robocode 中，雷达、炮塔、底盘可以独立旋转，合理的雷达锁定策略能让你始终掌握敌人的位置。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">setTurnRadarRight</span><span class="o">(</span><span class="nc">Double</span><span class="o">.</span><span class="na">POSITIVE_INFINITY</span><span class="o">);</span>
+    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 雷达持续旋转扫描</span>
+        <span class="n">execute</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onScannedRobot</span><span class="o">(</span><span class="nc">ScannedRobotEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 锁定目标：将雷达对准敌人方向</span>
+    <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">getHeadingRadians</span><span class="o">()</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getBearingRadians</span><span class="o">();</span>
+    <span class="n">setTurnRadarRightRadians</span><span class="o">(</span>
+        <span class="n">robocode</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Utils</span><span class="o">.</span><span class="na">normalRelativeAngle</span><span class="o">(</span><span class="n">angle</span> <span class="o">-</span> <span class="n">getRadarHeadingRadians</span><span class="o">())</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>这段代码的要点是 <code class="language-plaintext highlighter-rouge">* 2</code>：雷达锁定角度乘以 2，确保雷达在目标两侧来回扫描，不会丢失目标。</p>
+
+<h2 id="非线性移动">非线性移动</h2>
+
+<p>最简单的移动是直线来回，但这在高级对战中很容易被预判。非线性移动的核心是<strong>让敌人无法预测你的下一步位置</strong>。</p>
+
+<p>常用的策略包括：</p>
+
+<ul>
+  <li><strong>随机角度偏移</strong>：每次移动时随机偏转一个小角度</li>
+  <li><strong>Wall Smoothing</strong>：在接近墙壁时平滑转向，避免撞墙</li>
+  <li><strong>反重力移动</strong>：给敌人、墙壁等施加虚拟力场</li>
+</ul>
+
+<h2 id="实战经验">实战经验</h2>
+
+<p>在测试中，我发现以下组合效果最好：</p>
+
+<ol>
+  <li><strong>雷达</strong>：锁定角度乘 2.5（比默认 2 更好的覆盖）</li>
+  <li><strong>移动</strong>：随机偏转 + Wall Smoothing</li>
+  <li><strong>火控</strong>：根据距离动态调整火力</li>
+</ol>
+
+<p>后续会继续记录能量管理、弹道预测等更深入的内容。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a class="btn ghost" href="/blog/">&larr; Back to Blog</a>
+  </footer>
+</article>
+
+    </main>
+    <footer class="site-footer">
+  <p>&copy; 2026 徐浩宁. Built with Jekyll &amp; GitHub Pages. Hosted on GitHub Pages.</p>
+</footer>
+
+    <script src="/assets/js/main.js" defer></script>
+  </body>
+</html>

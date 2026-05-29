@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="zh-CN"><generator uri="https://jekyllrb.com/" version="4.4.1">Jekyll</generator><link href="https://xhn777.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://xhn777.github.io/" rel="alternate" type="text/html" hreflang="zh-CN" /><updated>2026-05-29T17:37:02+08:00</updated><id>https://xhn777.github.io/feed.xml</id><title type="html">徐浩宁 | Software Engineering Portfolio</title><subtitle>云南大学软件工程学生，关注 Java 后端开发、软件架构设计、UML 建模与 Robocode 智能对战。</subtitle><entry><title type="html">Robocode AdvancedRobot 开发笔记：从雷达锁定到智能移动</title><link href="https://xhn777.github.io/robocode/2026/05/28/robocode-advanced-robot.html" rel="alternate" type="text/html" title="Robocode AdvancedRobot 开发笔记：从雷达锁定到智能移动" /><published>2026-05-28T00:00:00+08:00</published><updated>2026-05-28T00:00:00+08:00</updated><id>https://xhn777.github.io/robocode/2026/05/28/robocode-advanced-robot</id><content type="html" xml:base="https://xhn777.github.io/robocode/2026/05/28/robocode-advanced-robot.html"><![CDATA[<h2 id="什么是-robocode">什么是 Robocode？</h2>
+
+<p><a href="https://robocode.sourceforge.io/">Robocode</a> 是一个编程对战游戏，你需要用 Java 编写一个坦克机器人，在虚拟战场上与其他机器人对战。AdvancedRobot 是其中功能最强大的基类，支持独立控制雷达、炮塔和底盘。</p>
+
+<h2 id="雷达锁定策略">雷达锁定策略</h2>
+
+<p>雷达锁定是战斗的第一步。在 Robocode 中，雷达、炮塔、底盘可以独立旋转，合理的雷达锁定策略能让你始终掌握敌人的位置。</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+    <span class="n">setTurnRadarRight</span><span class="o">(</span><span class="nc">Double</span><span class="o">.</span><span class="na">POSITIVE_INFINITY</span><span class="o">);</span>
+    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+        <span class="c1">// 雷达持续旋转扫描</span>
+        <span class="n">execute</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onScannedRobot</span><span class="o">(</span><span class="nc">ScannedRobotEvent</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c1">// 锁定目标：将雷达对准敌人方向</span>
+    <span class="kt">double</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">getHeadingRadians</span><span class="o">()</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="na">getBearingRadians</span><span class="o">();</span>
+    <span class="n">setTurnRadarRightRadians</span><span class="o">(</span>
+        <span class="n">robocode</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Utils</span><span class="o">.</span><span class="na">normalRelativeAngle</span><span class="o">(</span><span class="n">angle</span> <span class="o">-</span> <span class="n">getRadarHeadingRadians</span><span class="o">())</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>这段代码的要点是 <code class="language-plaintext highlighter-rouge">* 2</code>：雷达锁定角度乘以 2，确保雷达在目标两侧来回扫描，不会丢失目标。</p>
+
+<h2 id="非线性移动">非线性移动</h2>
+
+<p>最简单的移动是直线来回，但这在高级对战中很容易被预判。非线性移动的核心是<strong>让敌人无法预测你的下一步位置</strong>。</p>
+
+<p>常用的策略包括：</p>
+
+<ul>
+  <li><strong>随机角度偏移</strong>：每次移动时随机偏转一个小角度</li>
+  <li><strong>Wall Smoothing</strong>：在接近墙壁时平滑转向，避免撞墙</li>
+  <li><strong>反重力移动</strong>：给敌人、墙壁等施加虚拟力场</li>
+</ul>
+
+<h2 id="实战经验">实战经验</h2>
+
+<p>在测试中，我发现以下组合效果最好：</p>
+
+<ol>
+  <li><strong>雷达</strong>：锁定角度乘 2.5（比默认 2 更好的覆盖）</li>
+  <li><strong>移动</strong>：随机偏转 + Wall Smoothing</li>
+  <li><strong>火控</strong>：根据距离动态调整火力</li>
+</ol>
+
+<p>后续会继续记录能量管理、弹道预测等更深入的内容。</p>]]></content><author><name></name></author><category term="Robocode" /><category term="Java" /><category term="Robocode" /><category term="AdvancedRobot" /><category term="AI" /><summary type="html"><![CDATA[什么是 Robocode？]]></summary></entry><entry><title type="html">UML 部署图实战：Web-应用-数据库三层架构设计</title><link href="https://xhn777.github.io/architecture/2026/05/25/uml-deployment-diagram.html" rel="alternate" type="text/html" title="UML 部署图实战：Web-应用-数据库三层架构设计" /><published>2026-05-25T00:00:00+08:00</published><updated>2026-05-25T00:00:00+08:00</updated><id>https://xhn777.github.io/architecture/2026/05/25/uml-deployment-diagram</id><content type="html" xml:base="https://xhn777.github.io/architecture/2026/05/25/uml-deployment-diagram.html"><![CDATA[<h2 id="为什么需要部署图">为什么需要部署图？</h2>
+
+<p>UML 部署图（Deployment Diagram）用于描述系统的物理部署架构，展示软件组件如何分布在硬件节点上。在真实项目中，部署图是运维和架构沟通的重要工具。</p>
+
+<h2 id="标准三层架构">标准三层架构</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>┌─────────────────────────────────────────┐
+│              Web 服务器层                │
+│  ┌─────────┐  ┌─────────┐              │
+│  │ Nginx 1 │  │ Nginx 2 │  (负载均衡)   │
+│  └─────────┘  └─────────┘              │
+├─────────────────────────────────────────┤
+│             应用服务器层                 │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐│
+│  │  App 1   │ │  App 2   │ │  App 3   ││
+│  └──────────┘ └──────────┘ └──────────┘│
+├─────────────────────────────────────────┤
+│             数据库服务器层               │
+│  ┌──────────┐      ┌──────────┐        │
+│  │  Master  │──────│  Slave   │        │
+│  └──────────┘      └──────────┘        │
+└─────────────────────────────────────────┘
+</code></pre></div></div>
+
+<h2 id="节点规范">节点规范</h2>
+
+<h3 id="web-服务器nginx">Web 服务器（Nginx）</h3>
+<ul>
+  <li><strong>职责</strong>：反向代理、负载均衡、静态资源服务</li>
+  <li><strong>协议</strong>：HTTP/HTTPS</li>
+  <li><strong>端口</strong>：80/443</li>
+</ul>
+
+<h3 id="应用服务器">应用服务器</h3>
+<ul>
+  <li><strong>职责</strong>：业务逻辑处理</li>
+  <li><strong>技术栈</strong>：Spring Boot + Tomcat</li>
+  <li><strong>端口</strong>：8080（内网）</li>
+</ul>
+
+<h3 id="数据库服务器">数据库服务器</h3>
+<ul>
+  <li><strong>职责</strong>：数据持久化</li>
+  <li><strong>架构</strong>：主从复制（Master-Slave）</li>
+  <li><strong>端口</strong>：3306（内网）</li>
+</ul>
+
+<h2 id="关键设计考量">关键设计考量</h2>
+
+<ol>
+  <li><strong>负载均衡算法</strong>：建议使用 least_conn（最少连接数）</li>
+  <li><strong>健康检查</strong>：Nginx 定期探测应用服务器状态</li>
+  <li><strong>数据库读写分离</strong>：主库写、从库读</li>
+  <li><strong>网络隔离</strong>：数据库层只允许应用服务器访问</li>
+</ol>
+
+<p>下一篇会深入 UML 组件图，将部署图中的每个节点展开为内部组件。</p>]]></content><author><name></name></author><category term="Architecture" /><category term="UML" /><category term="部署图" /><category term="三层架构" /><category term="Nginx" /><summary type="html"><![CDATA[为什么需要部署图？]]></summary></entry><entry><title type="html">GitHub Pages + Jekyll + Actions：搭建全自动个人网站</title><link href="https://xhn777.github.io/devops/2026/05/22/github-pages-jekyll-setup.html" rel="alternate" type="text/html" title="GitHub Pages + Jekyll + Actions：搭建全自动个人网站" /><published>2026-05-22T00:00:00+08:00</published><updated>2026-05-22T00:00:00+08:00</updated><id>https://xhn777.github.io/devops/2026/05/22/github-pages-jekyll-setup</id><content type="html" xml:base="https://xhn777.github.io/devops/2026/05/22/github-pages-jekyll-setup.html"><![CDATA[<h2 id="为什么选这个方案">为什么选这个方案？</h2>
+
+<p>搭个人网站方法很多：WordPress、Hexo、Hugo……我选 Jekyll + GitHub Pages 的原因很简单：</p>
+
+<ol>
+  <li><strong>零成本托管</strong>：GitHub Pages 免费</li>
+  <li><strong>版本控制</strong>：网站源码就是 Git 仓库</li>
+  <li><strong>自动化部署</strong>：GitHub Actions 自动编译推送</li>
+  <li><strong>纯静态</strong>：速度快，无安全漏洞</li>
+</ol>
+
+<h2 id="项目结构">项目结构</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>my-github-page/
+├── .github/workflows/deploy.yml  ← 自动部署配置
+├── _config.yml                   ← Jekyll 配置
+├── _data/profile.yml             ← 个人信息数据
+├── _layouts/                     ← 页面布局模板
+├── _includes/                    ← 页头/页脚组件
+├── _posts/                       ← 博客文章
+├── assets/                       ← CSS/JS/图片
+└── index.html                    ← 首页
+</code></pre></div></div>
+
+<h2 id="github-actions-工作流">GitHub Actions 工作流</h2>
+
+<p>核心流程只有三步：</p>
+
+<ol>
+  <li><strong>检出代码</strong>（actions/checkout）</li>
+  <li><strong>编译 Jekyll</strong>（jekyll build）</li>
+  <li><strong>推送到 gh-pages 分支</strong>（peaceiris/actions-gh-pages）</li>
+</ol>
+
+<p>每次 push 到 main 分支就自动触发，编译产物自动出现在 <code class="language-plaintext highlighter-rouge">gh-pages</code> 分支上，GitHub Pages 自动更新。</p>
+
+<h2 id="部署配置要点">部署配置要点</h2>
+
+<ul>
+  <li>main 分支：放<strong>源代码</strong>（Jekyll 模板、Markdown 文章）</li>
+  <li>gh-pages 分支：放<strong>编译产物</strong>（纯 HTML/CSS/JS）</li>
+  <li>GitHub Pages 设置：Source 选 <code class="language-plaintext highlighter-rouge">gh-pages</code> 分支</li>
+</ul>
+
+<p>这样以后写新文章只需要在 <code class="language-plaintext highlighter-rouge">_posts/</code> 放一个 <code class="language-plaintext highlighter-rouge">.md</code> 文件，push 上去就自动部署，完全不需要手动操作。</p>]]></content><author><name></name></author><category term="DevOps" /><category term="Jekyll" /><category term="GitHub Actions" /><category term="CI/CD" /><category term="GitHub Pages" /><summary type="html"><![CDATA[为什么选这个方案？]]></summary></entry><entry><title type="html">第一篇学习笔记：从搭建个人主页开始整理技术作品</title><link href="https://xhn777.github.io/general/2026/05/20/first-learning-note.html" rel="alternate" type="text/html" title="第一篇学习笔记：从搭建个人主页开始整理技术作品" /><published>2026-05-20T00:00:00+08:00</published><updated>2026-05-20T00:00:00+08:00</updated><id>https://xhn777.github.io/general/2026/05/20/first-learning-note</id><content type="html" xml:base="https://xhn777.github.io/general/2026/05/20/first-learning-note.html"><![CDATA[<h2 id="为什么开始写博客">为什么开始写博客</h2>
+
+<p>作为一名软件工程专业的学生，我一直在写代码、做项目、学新技术，但从来没有系统地整理过。</p>
+
+<p>直到我意识到：<strong>一个项目做完就过去了，如果不记录下来，下次遇到同样的问题还得重新踩坑。</strong></p>
+
+<h2 id="这个网站的目标">这个网站的目标</h2>
+
+<ol>
+  <li><strong>作品集</strong>：展示课程项目和个人项目</li>
+  <li><strong>学习笔记</strong>：记录技术学习过程和踩坑经验</li>
+  <li><strong>个人品牌</strong>：让未来的合作伙伴（或面试官）快速了解我的能力</li>
+</ol>
+
+<h2 id="技术栈选择">技术栈选择</h2>
+
+<ul>
+  <li><strong>静态网站生成器</strong>：Jekyll（GitHub Pages 原生支持）</li>
+  <li><strong>托管平台</strong>：GitHub Pages（免费、稳定）</li>
+  <li><strong>CI/CD</strong>：GitHub Actions（自动编译部署）</li>
+  <li><strong>样式</strong>：手写 CSS（赛博朋克暗色主题）</li>
+</ul>
+
+<h2 id="后续计划">后续计划</h2>
+
+<ul class="task-list">
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />完善项目展示页面</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />添加更多 Robocode 实战笔记</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />写 UML 系列教程</li>
+  <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />持续优化网站性能</li>
+</ul>
+
+<p>这只是开始，希望这个博客能陪着我一起成长。</p>]]></content><author><name></name></author><category term="General" /><category term="个人主页" /><category term="入门" /><category term="Jekyll" /><summary type="html"><![CDATA[为什么开始写博客]]></summary></entry></feed>
